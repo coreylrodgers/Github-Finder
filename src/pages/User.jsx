@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  FaCodepen,
-  FaStore,
-  FaUser,
-  FaCode,
-  FaUserFirend,
-  FaUserFriends,
-  FaUsers,
-} from "react-icons/fa";
+import { FaCodepen, FaStore, FaUserFriends, FaUsers } from "react-icons/fa";
 import { useContext } from "react";
 import { useEffect } from "react/cjs/react.development";
 import GithubContext from "../context/github/GithubContext";
@@ -15,16 +7,21 @@ import RepoList from "../components/repos/RepoList";
 
 import { useParams, Link } from "react-router-dom";
 import Spinner from "../components/layout/Spinner";
+import {  getUserAndRepos } from "../context/github/GithubActions";
 
 function User() {
   const params = useParams();
+  const { user, loading, repos, dispatch } = useContext(GithubContext);
 
-  const { getUser, user, loading, getUserRepos, repos } =
-    useContext(GithubContext);
   useEffect(() => {
-    getUser(params.login);
-    getUserRepos(params.login);
-  }, []);
+    dispatch({ type: "SET_LOADING" });
+    const getUserData = async () => {
+      const user = await getUserAndRepos(params.login);
+      dispatch({type: 'GET_USER_AND_REPOS', payload: user})
+    };
+    getUserData()
+ 
+  }, [dispatch, params.login]);
 
   const {
     name,
@@ -117,20 +114,6 @@ function User() {
                       rel="noreferrer"
                     >
                       {twitter_username}
-                    </a>
-                  </div>
-                </div>
-              )}
-              {blog && (
-                <div className="stat">
-                  <div className="stat-title text-md">Website</div>
-                  <div className="text-lg stat-value">
-                    <a
-                      href={`https://${blog}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {blog}
                     </a>
                   </div>
                 </div>
