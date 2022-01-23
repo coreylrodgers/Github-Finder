@@ -1,7 +1,5 @@
-import React from "react";
+import React, { useContext, useEffect  } from "react";
 import { FaCodepen, FaStore, FaUserFriends, FaUsers } from "react-icons/fa";
-import { useContext } from "react";
-import { useEffect } from "react/cjs/react.development";
 import GithubContext from "../context/github/GithubContext";
 import RepoList from "../components/repos/RepoList";
 
